@@ -1,42 +1,47 @@
-import streamlit as st
-import pandas as pd
-import duckdb
+# pylint: disable=missing-module-docstring
+
 import io
 
-st.write("""
+import duckdb
+import pandas as pd
+import streamlit as st
+
+st.write(
+    """
 # SQL SRS
 Spaced Repetition System SQL practice
-""")
+"""
+)
 
-csv = '''
+CSV = """
 beverage,price
 orange juice,2.5
 Expresso,2
 Tea,3
-'''
-beverages = pd.read_csv(io.StringIO(csv))
+"""
+beverages = pd.read_csv(io.StringIO(CSV))
 
-csv2 = '''
+CSV2 = """
 food_item,food_price
 cookie juice, 2.5
 chocolatine,2
 muffin,3
-'''
-food_items = pd.read_csv(io.StringIO(csv2))
+"""
+food_items = pd.read_csv(io.StringIO(CSV2))
 
-answer_str= """
+ANSWER_STR = """
 SELECT * FROM beverages
 CROSS JOIN food_items
 """
 
-solution_df = duckdb.sql(answer_str).df()
+solution_df = duckdb.sql(ANSWER_STR).df()
 
 with st.sidebar:
     option = st.selectbox(
-       "How would you like to review?",
-       ("Joins", "Group by", "Windows functions"),
-       index=None,
-       placeholder="Select a theme...",
+        "How would you like to review?",
+        ("Joins", "Group by", "Windows functions"),
+        index=None,
+        placeholder="Select a theme...",
     )
     st.write("You selected:", option)
 
@@ -57,7 +62,9 @@ if query:
 
     n_lines_difference = result.shape[0] - solution_df.shape[0]
     if n_lines_difference != 0:
-        st.write(f"result has a {n_lines_difference} lines difference with the solution_df")
+        st.write(
+            f"result has a {n_lines_difference} lines difference with the solution_df"
+        )
 
 
 tab2, tab3 = st.tabs(["Tables", "Solution"])
@@ -71,4 +78,4 @@ with tab2:
     st.dataframe(solution_df)
 
 with tab3:
-    st.write(answer_str)
+    st.write(ANSWER_STR)
